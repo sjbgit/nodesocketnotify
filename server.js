@@ -21,107 +21,106 @@ var server = http.createServer(router);
 var io = socketio.listen(server);
 
 
+router.configure(function () {
+    router.use(express.static(path.resolve(__dirname, 'client')));
+    //router.use(express.static(__dirname + '/public')); 		// set the static files location /public/img will be /img for users
+    router.use(express.logger('dev')); 						// log every request to the console
+    router.use(express.bodyParser()); 							// pull information from html in POST
+    router.use(express.methodOverride()); 						// simulate DELETE and PUT
+});
 
-router.configure(function() {
-        router.use(express.static(path.resolve(__dirname, 'client')));
-		//router.use(express.static(__dirname + '/public')); 		// set the static files location /public/img will be /img for users
-		router.use(express.logger('dev')); 						// log every request to the console
-		router.use(express.bodyParser()); 							// pull information from html in POST
-		router.use(express.methodOverride()); 						// simulate DELETE and PUT
-	});
-	
-router.all('*', function(req, res, next) {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
-        next();
-    });
-    
-router.get('/api/notify', function(req, res) {
-			res.json({ message: 'test message from server'}); // return all todos in JSON format
-		});
-		
-router.post('/api/notify', function(req, res) {
-    
-        var message = req.body.message;
-        var name = req.body.name || '/api/notify';
-    
-        var data = {
-          name: name,
-          text: message
-        };
+router.all('*', function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+});
+
+router.get('/api/notify', function (req, res) {
+    res.json({message: 'test message from server'}); // return all todos in JSON format
+});
+
+router.post('/api/notify', function (req, res) {
+
+    var message = req.body.message;
+    var name = req.body.name || '/api/notify';
+
+    var data = {
+        name: name,
+        text: message
+    };
 
 
-        console.log('broadcast data');
-        console.log(data);
+    console.log('broadcast data');
+    console.log(data);
 
-        broadcast('message', data);
-        messages.push(data);
+    broadcast('message', data);
+    messages.push(data);
 
-        console.log('body message');
-        console.log(req.body.message);
-        
-		res.json({message: message + ' from server'});
+    console.log('body message');
+    console.log(req.body.message);
 
-	});
+    res.json({message: message + ' from server'});
+
+});
 
 var messages = [];
 var sockets = [];
 
 io.on('connection', function (socket) {
     messages.forEach(function (data) {
-      socket.emit('message', data);
+        socket.emit('message', data);
     });
 
     sockets.push(socket);
 
     socket.on('disconnect', function () {
-      sockets.splice(sockets.indexOf(socket), 1);
-      updateRoster();
+        sockets.splice(sockets.indexOf(socket), 1);
+        updateRoster();
     });
 
     socket.on('message', function (msg) {
-      var text = String(msg || '');
+        var text = String(msg || '');
 
-      if (!text)
-        return;
+        if (!text)
+            return;
 
-      socket.get('name', function (err, name) {
-        var data = {
-          name: name,
-          text: text
-        };
+        socket.get('name', function (err, name) {
+            var data = {
+                name: name,
+                text: text
+            };
 
-        broadcast('message', data);
-        messages.push(data);
-      });
+            broadcast('message', data);
+            messages.push(data);
+        });
     });
 
     socket.on('identify', function (name) {
-      socket.set('name', String(name || 'Anonymous'), function (err) {
-        updateRoster();
-      });
+        socket.set('name', String(name || 'Anonymous'), function (err) {
+            updateRoster();
+        });
     });
-  });
+});
 
 function updateRoster() {
-  async.map(
-    sockets,
-    function (socket, callback) {
-      socket.get('name', callback);
-    },
-    function (err, names) {
-      broadcast('roster', names);
-    }
-  );
+    async.map(
+        sockets,
+        function (socket, callback) {
+            socket.get('name', callback);
+        },
+        function (err, names) {
+            broadcast('roster', names);
+        }
+    );
 }
 
 function broadcast(event, data) {
-  sockets.forEach(function (socket) {
-    socket.emit(event, data);
-  });
+    sockets.forEach(function (socket) {
+        socket.emit(event, data);
+    });
 }
 
-server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
-  var addr = server.address();
-  console.log("Chat server listening at", addr.address + ":" + addr.port);
+server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function () {
+    var addr = server.address();
+    console.log("Chat server listening at", addr.address + ":" + addr.port);
 });
