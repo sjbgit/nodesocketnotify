@@ -39,6 +39,17 @@ router.get('/api/notify', function (req, res) {
     res.json({message: 'test message from server'}); // return all todos in JSON format
 });
 
+router.post('/api/perfcounter', function(req, res) {
+
+    var body = req.body;
+
+    var machine = body.machine;
+
+    res.json({message: machine + ' from server'});
+
+
+});
+
 router.post('/api/notify', function (req, res) {
 
     var message = req.body.message;
