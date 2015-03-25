@@ -50,7 +50,7 @@ router.post('/api/perfcounter', function(req, res) {
     res.json({message: machine + ' from server'});
 
 
-}); 
+});
 
 router.post('/api/notify', function (req, res) {
 
