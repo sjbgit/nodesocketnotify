@@ -45,10 +45,12 @@ router.post('/api/perfcounter', function(req, res) {
 
     var machine = body.machine;
 
+    broadcast('counter', body);
+
     res.json({message: machine + ' from server'});
 
 
-});
+}); 
 
 router.post('/api/notify', function (req, res) {
 

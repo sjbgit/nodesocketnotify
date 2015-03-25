@@ -24,6 +24,13 @@
           $scope.setName();
         });
 
+        socket.on('counter', function (msg) {
+          console.log('received counter message ------------');
+          console.log(msg);
+
+        });
+
+
         socket.on('message', function (msg) {
           $scope.messages.push(msg);
           
