@@ -35,7 +35,18 @@
                 var copiedMsg = angular.copy(msg);
 
 
-                $scope.machineCounters.push(copiedMsg);
+                //$scope.machineCounters.push(copiedMsg);
+
+                var index = getCounterIndex(msg);
+
+                console.log('returned index ' + index);
+
+                if (index === -1) {
+                    $scope.machineCounters.push(copiedMsg);
+                }
+                else {
+                    $scope.machineCounters[index] = copiedMsg;
+                }
 
                 $scope.$apply();
 
@@ -44,6 +55,19 @@
                 //console.log($scope.counters);
 
             });
+
+            function getCounterIndex(counter) {
+                var index = -1;
+                var arrayLength = $scope.machineCounters.length;
+                for (var i = 0; i < arrayLength; i++) {
+                    console.log($scope.machineCounters[i].machine);
+                    if ($scope.machineCounters[i].machine === counter.machine) {
+                        index = i;
+                        break
+                    }
+                }
+                return index;
+            }
 
 
             socket.on('message', function (msg) {
@@ -131,6 +155,10 @@
     <div ng-repeat="mc in machineCounters">
         <div>
             {{mc.machine}}
+            <ul ng-repeat="ctr in mc.counters">
+                <li>{{ctr.counter}} {{ctr.value}}</li>
+            </ul>
+
         </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>

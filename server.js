@@ -19,7 +19,7 @@ var express = require('express');
 var router = express();
 var server = http.createServer(router);
 var io = socketio.listen(server);
- 
+
 
 router.configure(function () {
     router.use(express.static(path.resolve(__dirname, 'client')));
