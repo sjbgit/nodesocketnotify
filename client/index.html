@@ -106,12 +106,12 @@
     <div class="navbar navbar-fixed-top navbar-inverse">
         <div class="navbar-inner">
             <div class="pull-right">
-                <a href="https://c9.io" class="brand">Cloud9 IDE</a>
+                <a href="https://c9.io" class="brand">Pulse</a>
             </div>
         </div>
     </div>
     <div class="page-header">
-        <h1>Chat Example</h1>
+        <h1>Performance Counters</h1>
     </div>
     <div class="row">
         <div class="span3">
@@ -154,7 +154,7 @@
     </div>
     <div ng-repeat="mc in machineCounters">
         <div>
-            {{mc.machine}}
+            {{mc.machine}} - {{mc.dateTime}}
             <ul ng-repeat="ctr in mc.counters">
                 <li>{{ctr.counter}} {{ctr.value}}</li>
             </ul>
