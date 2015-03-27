@@ -9,6 +9,7 @@
         body {
             padding-top: 60px;
         }
+        .nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
     </style>
     <script>
 
@@ -84,7 +85,17 @@
         </div>
     </div>
     <div class="row">
-
+        <div class="span12">
+            <accordion close-others="true">
+                <accordion-group is-open="true">
+                    <accordion-heading>
+                        I can have markup, too! <i class="pull-right glyphicon"
+                                                   ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+                    </accordion-heading>
+                    This is just some content to illustrate fancy headings.
+                </accordion-group>
+            </accordion>
+        </div>
     </div>
 </div>
 <!--
@@ -103,10 +114,19 @@
 </div>
 -->
 <script src="/socket.io/socket.io.js"></script>
+<!--
 <script src="/js/jquery.min.js"></script>
+-->
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
+<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.js"></script>
+
+<script src="/js/controllers.js"></script>
+
+<!--
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/angular.min.js"></script>
 <script src="/js/controllers.js"></script>
 <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.12.1.js"></script>
+-->
 </body>
 </html>

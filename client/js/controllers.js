@@ -1,7 +1,7 @@
 /**
  * Created by sbunke on 3/27/2015.
  */
-var app = angular.module('myModule', ['ui.bootstrap']);
+var app = angular.module('myModule', ['ui.bootstrap', 'ui.bootstrap.accordion']);
 
 app.controller('ChatController', ['$scope',
 
