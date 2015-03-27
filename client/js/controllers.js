@@ -16,6 +16,8 @@ app.controller('ChatController', ['$scope',
 
         $scope.machineCounters = [];
 
+        $scope.isCollapsed = false;
+
 
         socket.on('connect', function () {
             $scope.setName();
