@@ -95,3 +95,4 @@ app.controller('ChatController', ['$scope',
             socket.emit('identify', $scope.name);
         };
     }]);
+
