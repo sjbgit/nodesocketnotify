@@ -23,7 +23,7 @@
     </label>
     <accordion close-others="oneAtATime">
 
-        <accordion-group heading="{{mc.machine}} - {{mc.dateTime}}" ng-repeat="mc in machineCounters" is-open="true">
+        <accordion-group heading="{{mc.machine}} - {{mc.dateTime}}" ng-repeat="mc in machineCounters" is-open="mc.isOpen">
             <table class="table table-striped table-bordered">
 
                 <thead>

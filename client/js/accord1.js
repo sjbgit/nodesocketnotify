@@ -20,7 +20,7 @@ angular.module('ui.bootstrap.demo').controller('AccordionDemoCtrl', function ($s
 
     $scope.machineNames = {};
 
-    
+
 
     $scope.isCollapsed = false;
 

@@ -29,6 +29,7 @@ angular.module('ui.bootstrap.demo').controller('AccordionDemoCtrl', function ($s
 
         var copiedMsg = angular.copy(msg);
 
+        copiedMsg.isOpen = true;
 
         //$scope.machineCounters.push(copiedMsg);
 
