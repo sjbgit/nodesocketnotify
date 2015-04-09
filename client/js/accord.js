@@ -17,6 +17,20 @@ angular.module('ui.bootstrap.demo').controller('AccordionDemoCtrl', function ($s
 
     $scope.isCollapsed = false;
 
+    var testRoomName = 'testRoom';
+
+/*
+    socket.on('connection', function(innerSocket) {
+        innerSocket.on('join', function(roomData) {
+            socinnerSocketket.join(roomData.roomName);
+        })
+
+        innerSocket.on('leave', function(roomData) {
+            innerSocket.join(roomData.roomName);
+        })
+    });
+
+*/
 
     socket.on('connect', function () {
         $scope.setName();

@@ -21,6 +21,64 @@ var server = http.createServer(router);
 var io = socketio.listen(server);
 
 
+var rooms = {};
+
+
+
+
+//Try using rooms
+var Room = io
+    .of('/room')
+    .on('connection', function(socket) {
+        var joinedRoom = null;
+        socket.on('join room', function(data) {
+            socket.join(data); //socket is joining room
+            joinedRoom = data;
+            socket.emit('joined', "you've joined " + data);
+            rooms[joinedRoom] = socket;
+            socket.broadcast.to(joinedRoom)
+                .send('someone joined room');
+        });
+        socket.on('fromclient', function(data) {
+            if (joinedRoom) {
+                socket.broadcast.to(joinedRoom).send(data);
+            } else {
+                socket.send(
+                    "you're not joined a room." +
+                    "select a room and then push join."
+                );
+            }
+        });
+    });
+
+console.log(Room);
+
+/*
+router.post('/api/roomsend', function(req, res) {
+
+
+    var body = req.body;
+
+    var machine = body.machine;
+
+    console.log('machine: ' + machine);
+
+    //var body = req.body;
+
+    //console.log('body: ' + body);
+
+    //var message = body.message;
+
+    //Room.emit('message', message);
+
+    //broadcast('counter', body);
+
+    //res.json({message: message + ' from server'});
+
+
+});
+*/
+
 router.configure(function () {
     router.use(express.static(path.resolve(__dirname, 'client')));
     //router.use(express.static(__dirname + '/public')); 		// set the static files location /public/img will be /img for users
@@ -42,6 +100,55 @@ router.get('/api/notify', function (req, res) {
 router.post('/api/perftest', function (req, res) {
     res.json({message: 'Perf test - test message from server'}); // return all todos in JSON format
 });
+
+
+router.post('/api/room/:room', function(req, res) {
+
+    var roomName = req.params.room;
+
+    console.log('post to room name: ' + roomName);
+
+
+    var socket = rooms[roomName];
+
+
+    socket.broadcast.to(roomName)
+        .send('message', 'server message');
+
+    //io.sockets.broadcast.to(roomName).send('server message');
+
+    //var count = Room.sockets.length;
+    //console.log(count);
+
+
+    //Room.sockets.in(roomName).emit('message', 'server message');
+
+    //io.to(roomName).emit('message', 'server message');
+
+    res.json({message: roomName + ' from server'});
+
+});
+
+
+router.post('/api/roomsend', function(req, res) {
+
+    var body = req.body;
+
+    var message = body.message;
+
+    console.log('message: ' + message);
+
+   //does this go to all rooms?
+    Room.emit('message', message);
+
+    //broadcast('counter', body);
+
+    res.json({message: message + ' from server'});
+
+
+});
+
+
 
 router.post('/api/perfcounter', function(req, res) {
 
@@ -130,6 +237,13 @@ function updateRoster() {
         }
     );
 }
+
+//this should work the same as broadcast
+/*
+function broadcastAll(event, data) {
+    io.emit(event, data);
+}
+*/
 
 function broadcast(event, data) {
     sockets.forEach(function (socket) {

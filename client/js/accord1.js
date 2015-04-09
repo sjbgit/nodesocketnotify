@@ -10,6 +10,35 @@ angular.module('ui.bootstrap.demo').controller('AccordionDemoCtrl', function ($s
 
     var socket = io.connect();
 
+
+
+    var room = io.connect('/room');
+
+
+    room.on('connect', function() {
+       console.log('room connect');
+        room.emit('join room', 'redis_room');
+
+    });
+
+    room.on('joined', function(msg) {
+        console.log('room joined: ' + msg);
+    });
+
+    room.on('message', function(msg) {
+        console.log('room message: ' + msg);
+    });
+
+
+    $scope.joinRoom = function(roomName) {
+        room.emit('join room', roomName);
+
+    }
+
+
+
+
+
     $scope.messages = [];
     $scope.roster = [];
     $scope.name = '';
