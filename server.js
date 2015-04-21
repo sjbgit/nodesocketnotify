@@ -148,6 +148,20 @@ router.post('/api/roomsend', function(req, res) {
 
 });
 
+//{ event: 'graph', name: 'abc', value: 123 }
+router.post('/api/broadcast', function(req, res) {
+
+    var body = req.body;
+
+    var name = body.name;
+
+    broadcast(body.event, body);
+
+    res.json({message: JSON.stringify(body) + ' from server'});
+
+
+});
+
 
 
 router.post('/api/perfcounter', function(req, res) {
