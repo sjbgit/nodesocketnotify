@@ -10,6 +10,28 @@ var async = require('async');
 var socketio = require('socket.io');
 var express = require('express');
 
+var config = require('./config');
+var RedisInfo = require('./lib/redisInfo');
+
+var redisHelper = new RedisInfo(config);
+
+setInterval(function() {
+    redisHelper.getInfo(function(input) {
+        console.log('from get info: ')
+        console.log(input);
+    })
+}, 5000);
+
+/*
+redisHelper.getInfo(function(input) {
+
+    console.log('from get info: ')
+    console.log(input);
+    //console.log(input);
+    //console.log(input);
+});
+*/
+
 //
 // ## SimpleServer `SimpleServer(obj)`
 //
@@ -23,6 +45,16 @@ var io = socketio.listen(server);
 
 var rooms = {};
 
+
+//Redis
+setInterval(function() {
+    redisHelper.getInfo(function(input) {
+        broadcast('redis', input);
+        console.log(input);
+        //console.log('from get info: ')
+        //console.log(input);
+    })
+}, 5000);
 
 
 
