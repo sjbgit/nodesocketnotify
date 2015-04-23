@@ -15,12 +15,15 @@ var RedisInfo = require('./lib/redisInfo');
 
 var redisHelper = new RedisInfo(config);
 
+
+/*
 setInterval(function() {
     redisHelper.getInfo(function(input) {
         console.log('from get info: ')
         console.log(input);
     })
 }, 5000);
+*/
 
 /*
 redisHelper.getInfo(function(input) {
@@ -45,19 +48,26 @@ var io = socketio.listen(server);
 
 var rooms = {};
 
+var broadcastRedis = true;
+
 
 //Redis
 var interval = setInterval(function() {
     redisHelper.getInfo(function(input) {
-        broadcast('redis', input);
-        console.log(input);
+
+        if (broadcastRedis) {
+            broadcast('redis', input);
+            console.log(input);
+        }
+        console.log(new Date());
+
         //console.log('from get info: ')
         //console.log(input);
     })
-}, 10000);
+}, 5000);
 
 //TODO: REMOVE THIS TO GET REDIS ON AN INTERVAL WORKING
-clearInterval(interval);
+//clearInterval(interval);
 
 
 
@@ -135,6 +145,26 @@ router.get('/api/notify', function (req, res) {
 router.post('/api/perftest', function (req, res) {
     res.json({message: 'Perf test - test message from server'}); // return all todos in JSON format
 });
+
+router.post('/api/redisToggle/:value', function (req, res) {
+    console.log('param: ' + req.params.value);
+    var value = false; //Boolean(req.params.value);
+
+    if (req.params.value == 'true') {
+        value = true;
+    }
+
+    console.log(typeof value);
+
+    console.log('value: ' + value);
+
+    broadcastRedis = value;
+
+    console.log('set broadcastRedis : ' + broadcastRedis);
+
+    res.json({message: 'redisToggle test - test message from server'}); // return all todos in JSON format
+});
+
 
 
 router.post('/api/room/:room', function(req, res) {
