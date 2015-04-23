@@ -53,7 +53,7 @@ var broadcastRedis = true;
 
 //Redis
 var interval = setInterval(function() {
-    redisHelper.getInfo(function(input) {
+    redisHelper.getInfoItems(function(input) {
 
         if (broadcastRedis) {
             broadcast('redis', input);
@@ -62,7 +62,7 @@ var interval = setInterval(function() {
         console.log(new Date());
 
         //console.log('from get info: ')
-        //console.log(input);
+        console.log('++++++++++++++++++++++++++++++++++++');
     })
 }, 5000);
 
