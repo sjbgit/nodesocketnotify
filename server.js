@@ -47,14 +47,17 @@ var rooms = {};
 
 
 //Redis
-setInterval(function() {
+var interval = setInterval(function() {
     redisHelper.getInfo(function(input) {
         broadcast('redis', input);
         console.log(input);
         //console.log('from get info: ')
         //console.log(input);
     })
-}, 5000);
+}, 10000);
+
+//TODO: REMOVE THIS TO GET REDIS ON AN INTERVAL WORKING
+clearInterval(interval);
 
 
 
