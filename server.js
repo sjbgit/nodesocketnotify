@@ -138,6 +138,10 @@ router.all('*', function (req, res, next) {
     next();
 });
 
+router.get('/api/date', function (req, res) {
+    res.json({message: (new Date())}); // return all todos in JSON format
+});
+
 router.get('/api/notify', function (req, res) {
     res.json({message: 'test message from server'}); // return all todos in JSON format
 });
