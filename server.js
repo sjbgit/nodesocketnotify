@@ -203,7 +203,7 @@ router.post('/api/roomsend', function(req, res) {
 
     var body = req.body;
 
-    var message = body.message;
+    var message = body.message;  
 
     console.log('message: ' + message);
 
